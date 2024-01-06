@@ -1,7 +1,7 @@
 AFRAME.registerComponent('explosion', {
     schema: {
         radius: {type: 'number', default: 2},
-        numberOfBlobs: {type: 'number', default: 24},        
+        numberOfBlobs: {type: 'number', default: 50},        
     },
     init: function () {
         // main blob
@@ -18,7 +18,7 @@ AFRAME.registerComponent('explosion', {
             const blob = this.createBlob(radius);                           
             this.setPositionAndSpeed(blob);
             const delay = Math.random() * 480
-            this.animateBlob(blob, delay);
+            this.animateBlob(blob, 0);
             this.el.sceneEl.appendChild(blob);
             this.blobsToCreate--;
         }
@@ -82,14 +82,14 @@ AFRAME.registerComponent('explosion', {
             type: 'color',            
             dur: 600,
             delay: delay,
-            easing: 'easeInQuad',
+            easing: 'easeInCubic',
         });
         blob.setAttribute('animation__4', {
             property: 'material.color',
-            to: "#800",
+            to: "#222",
             type: 'color',            
             dur: 200,
-            easing: 'linear',
+            easing: 'easeInCubic',
             startEvents: 'animationcomplete__3'
         });
     }
