@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="components/explosion.js"></script>
+
+    <style>
+        .a-grab-cursor {
+            cursor: crosshair !important;
+        }
+    </style>
+    <script lang="javascript">
+        THREE.Math = THREE.MathUtils;
+    </script>
+</head>
+
+<body>
+    <a-scene stats light="defaultLightsEnabled: false">
+        <a-assets>
+            <a-asset-item id="particle" src="images/particle.gif"></a-asset-item>
+        </a-assets>
+
+        <a-camera>
+            <a-entity id="cursor"
+                cursor="rayOrigin: mouse" 
+                raycaster="objects: .colliding"
+                geometry="primitive: ring; radiusInner: 0.018; radiusOuter: 0.02"
+                position="0 0 -1"
+                material="color: lightgreen; shader: flat"></a-entity>
+        </a-camera>
+
+        <a-sky class="colliding" src="images/nebula-darker-2.jpg" material="" geometry="segmentsWidth: 8; segmentsHeight: 8"></a-sky>
+        <a-entity light="type: directional; color: #FFF; intensity: 10" position="-5 .1 2"></a-entity>
+        
+        <a-entity explosion
+            position="0 0 -5"></a-entity>
+    </a-scene>
+</body>
+
+</html>
