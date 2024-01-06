@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="components/asteroid.js"></script>
+    <script src="components/turret.js"></script>
+    <script src="components/rotation-mimic.js"></script>
+    <script src="components/projectile.js"></script>
+    <script src="components/shooter.js"></script>
+    <script src="components/asteroid-field.js"></script>
+    <script src="components/fly-along-curve.js"></script>    
+    <script src="components/enemy-spawner.js"></script>
+    <script src="components/control-switcher.js"></script>
+    <script src="components/space-dust.js"></script>
+
+    <style>
+        .a-grab-cursor {
+            cursor: crosshair !important;
+        }
+    </style>
+    <script lang="javascript">
+        THREE.Math = THREE.MathUtils;
+    </script>
+</head>
+
+<body>
+    <a-scene stats light="defaultLightsEnabled: false" obb-collider>
+        <a-assets>
+            <a-asset-item id="battleship" src="assets/Imperial.glb"></a-asset-item>
+            <a-asset-item id="turret-top" src="assets/canon-vr-turret-top.glb"></a-asset-item>
+            <a-asset-item id="turret-mid" src="assets/canon-vr-turret-mid.glb"></a-asset-item>
+            <a-asset-item id="turret-bottom" src="assets/canon-vr-turret-bottom.glb"></a-asset-item>
+            <a-asset-item id="pancake-ship" src="assets/Pancake.glb"></a-asset-item>
+            <a-asset-item id="particle" src="images/particle.gif"></a-asset-item>
+            <audio id="laserShoot" src="assets/laserShoot.wav" preload="auto"></audio>
+        </a-assets>
+
+        <a-camera>
+            <a-entity id="cursor"
+                cursor="rayOrigin: mouse" 
+                raycaster="objects: .colliding"
+                geometry="primitive: ring; radiusInner: 0.018; radiusOuter: 0.02"
+                position="0 0 -1"
+                material="color: lightgreen; shader: flat"></a-entity>
+        </a-camera>
+
+        <a-sky class="colliding" src="images/nebula-darker-2.jpg" material="" geometry="segmentsWidth: 8; segmentsHeight: 8"></a-sky>
+        <a-entity light="type: directional; color: #FFF; intensity: 10" position="-5 .1 2"></a-entity>
+        
+        <a-gltf-model src="#battleship" position="0 -5.38932 0" rotation="0 180 0" scale="3 3 3"></a-gltf-model>
+
+        <a-entity id="left-turret" position="-1.5 0 0">        
+            <a-entity id="left-cannon" turret="target: #cursor" position="0 1 0">
+                <a-gltf-model src="#turret-top" position="0 0.3 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
+                <!-- <a-entity shooter="" sound="src: #laserShoot" position="0 0.33 -1.21"></a-entity> -->
+                <!-- <a-entity id="left-raycaster" raycaster="showLine: true; objects: .colliding" position="0 0.33 -1.21"></a-entity> -->
+            </a-entity>        
+            <a-gltf-model src="#turret-mid" rotation-mimic="target: #left-cannon; axes: y" position="0 1.36552 0" scale="0.5 0.5 0.5"></a-gltf-model>
+            <a-gltf-model src="#turret-bottom" position="0 1.36552 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
+        </a-entity>
+
+        <a-entity id="right-turret" position="1.5 0 0">        
+            <a-entity id="right-cannon" turret="target: #cursor" position="0 1 0">
+                <a-gltf-model src="#turret-top" position="0 0.3 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
+                <!-- <a-entity shooter="" sound="src: #laserShoot" position="0 0.33 -1.21"></a-entity> -->
+                <!-- <a-entity id="right-raycaster" raycaster="showLine: true; objects: .colliding" position="0 0.33 -1.21"></a-entity> -->
+            </a-entity>        
+            <a-gltf-model src="#turret-mid" rotation-mimic="target: #right-cannon; axes: y" position="0 1.36552 0" scale="0.5 0.5 0.5"></a-gltf-model>
+            <a-gltf-model src="#turret-bottom" position="0 1.36552 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
+        </a-entity>
+
+        <a-entity id="left-hand" laser-controls="hand: left" oculus-touch-controls="hand: left"></a-entity>
+        <a-entity id="right-hand" laser-controls="hand: right" oculus-touch-controls="hand: right" raycaster="objects: .colliding" control-switcher></a-entity>
+
+        <!-- <a-entity asteroid-field position="0 2 -15"></a-entity> -->
+        <a-entity position="0 0 0" space-dust></a-entity>
+
+        <a-entity enemy-spawner></a-entity>
+    </a-scene>
+</body>
+
+</html>

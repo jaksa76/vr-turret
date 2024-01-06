@@ -1,0 +1,8 @@
+{
+    "liveServer.settings.https": {
+        "enable": true, //set it true to enable the feature.
+        "cert": "C:\\Users\\Jaksa\\Programming\\vr-turret\\cert.pem", //full path of the certificate
+        "key": "C:\\Users\\Jaksa\\Programming\\vr-turret\\key.pem",
+        "passphrase": ""
+    }
+}
