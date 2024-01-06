@@ -1,35 +1,48 @@
 AFRAME.registerComponent('explosion', {
     schema: {
         radius: {type: 'number', default: 2},
-        numberOfBlobs: {type: 'number', default: 50},        
+        numberOfBlobs: {type: 'number', default: 24},        
     },
     init: function () {
         // main blob
         const blob = this.createBlob(this.data.radius);
         this.animateBlob(blob, 0);
-
         blob.setAttribute('position', this.el.object3D.position);
         this.el.sceneEl.appendChild(blob);
 
-        for (let i = 0; i < this.data.numberOfBlobs; i++) {
+        this.blobsToCreate = this.data.numberOfBlobs;
+    },
+    tick: function () {
+        if (this.blobsToCreate > 0) {
             const radius = Math.random() * 0.5 + .7;        
-            const blob = this.createBlob(radius);   
-                        
-            // position the blob randomly on the surface of the main blob
-            randomPosition = new THREE.Vector3();
-            randomPosition.setFromSphericalCoords(
-                this.data.radius * .9,
-                Math.random() * Math.PI,
-                Math.random() * Math.PI * 2
-            );            
-            randomPosition.add(this.el.object3D.position);
-            blob.setAttribute('position', randomPosition);
-
-            const delay = Math.random() * 1200
+            const blob = this.createBlob(radius);                           
+            this.setPositionAndSpeed(blob);
+            const delay = Math.random() * 480
             this.animateBlob(blob, delay);
-
             this.el.sceneEl.appendChild(blob);
+            this.blobsToCreate--;
         }
+    },
+    setPositionAndSpeed: function (blob) {
+        var relativePosition = new THREE.Vector3();
+        relativePosition.setFromSphericalCoords(
+            this.data.radius * .3,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI * 2
+        );                
+        const worldPosition = relativePosition.clone();
+        worldPosition.add(this.el.object3D.position);                                
+        blob.setAttribute('position', worldPosition);
+
+        const direction = relativePosition.clone();
+        direction.multiplyScalar(2);
+        direction.add(this.el.object3D.position);
+        blob.setAttribute('animation', {
+            property: 'position',
+            to: direction,
+            dur: 1000,
+            easing: 'easeOutQuad',
+        });
     },
     createBlob: function (radius) {
         const blob = document.createElement('a-entity');
@@ -40,7 +53,7 @@ AFRAME.registerComponent('explosion', {
             segmentsHeight: 8,
         });
         blob.setAttribute('material', {
-            color: "white",
+            color: "#FF8",
             shader: 'flat',
         });
         blob.setAttribute('position', this.el.object3D.position);
@@ -53,21 +66,31 @@ AFRAME.registerComponent('explosion', {
             to: "1 1 1",
             dur: 500,
             delay: delay,
-            easing: 'easeOutExpo',
+            easing: 'easeOutQuad',
         });
         blob.setAttribute('animation__2', {
             property: 'scale',
             to: '0 0 0',
-            dur: 500,
-            delay: 500,
+            dur: 800,
+            delay: 100,
             easing: 'easeInQuad',
             startEvents: 'animationcomplete__1'
         });
         blob.setAttribute('animation__3', {
             property: 'material.color',
-            to: "#FC0",
-            dur: 500,
+            to: "#F40",
+            type: 'color',            
+            dur: 600,
+            delay: delay,
+            easing: 'easeInQuad',
+        });
+        blob.setAttribute('animation__4', {
+            property: 'material.color',
+            to: "#800",
+            type: 'color',            
+            dur: 200,
             easing: 'linear',
+            startEvents: 'animationcomplete__3'
         });
     }
 });
