@@ -1,6 +1,3 @@
-* alien ships
-    * ships have life points 1h
-    * explosions 4h
 * turret tracking speed 1h
 * turret tracking sound 1h
 * better sprite for projectile 1h

@@ -44,7 +44,7 @@ AFRAME.registerComponent('enemy-spawner', {
                         model.setAttribute('scale', '0.5 0.5 0.5');
                         model.setAttribute('ammo-body', {type: 'kinematic', emitCollisionEvents: true});
                         model.setAttribute('ammo-shape', {type: 'box', fit:'manual', halfExtents: '2 .5 2'});
-                        model.setAttribute('destroyable', '');                        
+                        model.setAttribute('destroyable', 'health', 20);  
                         enemy.appendChild(model);
                     }
                 }, wave.start + i * wave.interval);                

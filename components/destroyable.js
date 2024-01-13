@@ -1,11 +1,9 @@
 AFRAME.registerComponent('destroyable', {
     schema: {
-        health: {type: 'number', default: 10},
+        health: {type: 'number', default: 100},
     },
     init: function() {
         this.el.addEventListener('collidestart', this.hit.bind(this));
-        
-        this.data.health = 10;
     },
     hit: function(evt) {
         if (evt.detail.targetEl.className == 'bullet') {

@@ -5,7 +5,7 @@ AFRAME.registerComponent('shooter', {
         this.lastShot = 0;
     },
     tick(time, timeDelta) {
-        if (time - this.lastShot > 500) {
+        if (time - this.lastShot > 200) {
             this.lastShot = time;
 
             const p = new THREE.Vector3();
@@ -27,7 +27,10 @@ AFRAME.registerComponent('shooter', {
             this.el.sceneEl.appendChild(projectile);
 
             // play sound
-            if (this.el.components.sound) this.el.components.sound.playSound();
+            if (this.el.components.sound) {
+                this.el.components.sound.stopSound();
+                this.el.components.sound.playSound();
+            }
         }
     }
 });
