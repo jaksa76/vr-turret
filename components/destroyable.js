@@ -3,14 +3,11 @@ AFRAME.registerComponent('destroyable', {
         health: {type: 'number', default: 10},
     },
     init: function() {
-        this.el.addEventListener('obbcollisionstarted', this.hit.bind(this));
-        this.el.addEventListener('collide', this.hit.bind(this));
         this.el.addEventListener('collidestart', this.hit.bind(this));
         
         this.data.health = 10;
     },
     hit: function(evt) {
-        console.log(evt);
         if (evt.detail.targetEl.className == 'bullet') {
             this.data.health -= 10;
             if (this.data.health <= 0) {

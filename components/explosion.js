@@ -2,7 +2,7 @@ AFRAME.registerComponent('explosion', {
     schema: {
         radius: {type: 'number', default: 2},
         numberOfBlobs: {type: 'number', default: 50},        
-        sound: {type: 'string', default: '#explosion-sound'},
+        sound: {type: 'string', default: '#explosionSound'},
     },
     init: function () {
         // main blob
@@ -14,13 +14,11 @@ AFRAME.registerComponent('explosion', {
         this.blobsToCreate = this.data.numberOfBlobs;
 
         // play sound
-        const sound = document.createElement('a-entity');
-        sound.setAttribute('sound', {
-            src: this.data.sound,
-            volume: 0.5,
+        this.el.setAttribute('sound', {
+            src: '#explosionSound',
+            volume: 20,
+            // autoplay: true,
         });
-        this.el.sceneEl.appendChild(sound);
-        sound.components.sound.playSound();
     },
     tick: function () {
         if (this.blobsToCreate > 0) {
@@ -32,7 +30,7 @@ AFRAME.registerComponent('explosion', {
             this.el.sceneEl.appendChild(blob);
             this.blobsToCreate--;
         }
-    },
+    },    
     setPositionAndSpeed: function (blob) {
         var relativePosition = new THREE.Vector3();
         relativePosition.setFromSphericalCoords(
@@ -102,5 +100,10 @@ AFRAME.registerComponent('explosion', {
             easing: 'easeInCubic',
             startEvents: 'animationcomplete__3'
         });
+    },
+    events: {
+        "sound-loaded": function (e) {
+            e.target.components.sound.playSound();
+        }
     }
 });

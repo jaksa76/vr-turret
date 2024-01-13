@@ -17,7 +17,7 @@ AFRAME.registerComponent('projectile', {
         }
     },
     events: {
-        obbcollisionstarted: function(e) {
+        collidestart: function(e) {
             this.el.hideCollider = function() {}; // added to avoid error
             this.el.sceneEl.removeChild(this.el);
         }
