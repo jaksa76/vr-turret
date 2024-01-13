@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>        
+        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-particle-system-component@latest/dist/aframe-particle-system-component.min.js"></script>
+        <script src="components/projectile.js"></script>
+        <script src="components/destroyable.js"></script>
+
+    </head>
+    <body>
+        <a-scene physics="debug: true" stats>
+            <a-entity id="camera" camera wasd-controls look-controls="pointerLockEnabled: true">
+                <a-box position="0 0 0" color="red"></a-box>
+            </a-entity>
+
+            <a-sky color="black"></a-sky>
+            
+            <a-grid id="grid" position="0 -1 0" static-body></a-grid>
+            <!-- <a-entity position="0 2.25 -15" particle-system="preset: rain"></a-entity> -->
+
+            <a-sphere position="0 2 -3" width="2" height="2" depth="2" dynamic-body></a-sphere>
+            <a-box class="bullet" position="5 0 3" width="2" height="2" depth="2" static-body projectile></a-box>            
+            <a-box position="5 0 -3" width="2" height="2" depth="2" static-body destroyable></a-box>
+        </a-scene>
+    </body>
+</html>

@@ -18,6 +18,7 @@
     <a-scene stats light="defaultLightsEnabled: false">
         <a-assets>
             <a-asset-item id="particle" src="images/particle.gif"></a-asset-item>
+            <audio id="explosion-sound" src="assets/explosion.wav"></audio>
         </a-assets>
 
         <a-camera>
@@ -34,7 +35,8 @@
         
         <a-entity explosion
             position="-6 0 -10"
-            animation="property: position; to: 6 0 -10; dur: 1000; easing: linear; loop: false"
+            animation="property: position; to: 6 0 -10; dur: 10000; easing: linear; loop: false"    
+            sound="src: #explosion-sound;"        
             ></a-entity>
     </a-scene>
 </body>

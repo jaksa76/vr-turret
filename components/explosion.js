@@ -2,6 +2,7 @@ AFRAME.registerComponent('explosion', {
     schema: {
         radius: {type: 'number', default: 2},
         numberOfBlobs: {type: 'number', default: 50},        
+        sound: {type: 'string', default: '#explosion-sound'},
     },
     init: function () {
         // main blob
@@ -11,6 +12,15 @@ AFRAME.registerComponent('explosion', {
         this.el.sceneEl.appendChild(blob);
 
         this.blobsToCreate = this.data.numberOfBlobs;
+
+        // play sound
+        const sound = document.createElement('a-entity');
+        sound.setAttribute('sound', {
+            src: this.data.sound,
+            volume: 0.5,
+        });
+        this.el.sceneEl.appendChild(sound);
+        sound.components.sound.playSound();
     },
     tick: function () {
         if (this.blobsToCreate > 0) {
@@ -49,8 +59,8 @@ AFRAME.registerComponent('explosion', {
         blob.setAttribute('geometry', {
             primitive: 'sphere',
             radius: radius,
-            segmentsWidth: 8,
-            segmentsHeight: 8,
+            segmentsWidth: 6,
+            segmentsHeight: 6,
         });
         blob.setAttribute('material', {
             color: "#FF8",

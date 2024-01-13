@@ -2,6 +2,11 @@
 
 <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/MozillaReality/ammo.js@8bbc0ea/builds/ammo.wasm.js"></script>      
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+  
+
     <script src="components/asteroid.js"></script>
     <script src="components/turret.js"></script>
     <script src="components/rotation-mimic.js"></script>
@@ -12,6 +17,8 @@
     <script src="components/enemy-spawner.js"></script>
     <script src="components/control-switcher.js"></script>
     <script src="components/space-dust.js"></script>
+    <script src="components/explosion.js"></script>
+    <script src="components/destroyable.js"></script>
 
     <style>
         .a-grab-cursor {
@@ -24,7 +31,7 @@
 </head>
 
 <body>
-    <a-scene stats light="defaultLightsEnabled: false" obb-collider>
+    <a-scene stats light="defaultLightsEnabled: false" physics=" driver: ammo; debug: true; debugDrawMode: 1;">
         <a-assets>
             <a-asset-item id="battleship" src="assets/Imperial.glb"></a-asset-item>
             <a-asset-item id="turret-top" src="assets/canon-vr-turret-top.glb"></a-asset-item>
@@ -33,6 +40,7 @@
             <a-asset-item id="pancake-ship" src="assets/Pancake.glb"></a-asset-item>
             <a-asset-item id="particle" src="images/particle.gif"></a-asset-item>
             <audio id="laserShoot" src="assets/laserShoot.wav" preload="auto"></audio>
+            <audio id="explosion-sound" src="assets/explosion.wav"></audio>
         </a-assets>
 
         <a-camera>
@@ -52,7 +60,7 @@
         <a-entity id="left-turret" position="-1.5 0 0">        
             <a-entity id="left-cannon" turret="target: #cursor" position="0 1 0">
                 <a-gltf-model src="#turret-top" position="0 0.3 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
-                <a-entity shooter="" sound="src: #laserShoot" position="0 0.33 -1.21"></a-entity>
+                <a-entity shooter="" sound="src: #laserShoot; poolSize: 2" position="0 0.33 -1.21"></a-entity>
                 <!-- <a-entity id="left-raycaster" raycaster="showLine: true; objects: .colliding" position="0 0.33 -1.21"></a-entity> -->
             </a-entity>        
             <a-gltf-model src="#turret-mid" rotation-mimic="target: #left-cannon; axes: y" position="0 1.36552 0" scale="0.5 0.5 0.5"></a-gltf-model>

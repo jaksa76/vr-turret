@@ -20,8 +20,10 @@ AFRAME.registerComponent('shooter', {
             const projectile = document.createElement('a-entity');
             projectile.setAttribute('projectile', 'velocity', v);                        
             projectile.setAttribute('position', {x: p.x, y: p.y, z: p.z});
-            projectile.setAttribute('geometry', { primitive: 'circle', radius: PROJECTILE_SIZE, segments: 1 });            
-            projectile.setAttribute('obb-collider', 'size', {x: PROJECTILE_SIZE, y: PROJECTILE_SIZE, z: PROJECTILE_SIZE});
+            projectile.setAttribute('geometry', { primitive: 'box', width: PROJECTILE_SIZE, height: PROJECTILE_SIZE, depth: PROJECTILE_SIZE });
+            projectile.setAttribute('ammo-body', {type: 'kinematic'});
+            projectile.setAttribute('ammo-shape', {type: 'box'});
+            projectile.setAttribute('class', 'bullet');
             this.el.sceneEl.appendChild(projectile);
 
             // play sound

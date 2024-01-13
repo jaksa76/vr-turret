@@ -36,12 +36,15 @@ AFRAME.registerComponent('enemy-spawner', {
                 setTimeout(() => {
                     if (wave.type == 'fly-along-curve') {
                         const enemy = document.createElement('a-entity');
-                        enemy.setAttribute('fly-along-curve', 'curve', wave.curve);                        
+                        enemy.setAttribute('fly-along-curve', 'curve', wave.curve);
                         this.el.appendChild(enemy);
 
                         const model = document.createElement('a-entity');
                         model.setAttribute('gltf-model', '#pancake-ship');
                         model.setAttribute('scale', '0.5 0.5 0.5');
+                        model.setAttribute('ammo-body', {type: 'kinematic', emitCollisionEvents: true});
+                        model.setAttribute('ammo-shape', {type: 'box', fit:'manual', halfExtents: '2 .5 2'});
+                        model.setAttribute('destroyable', '');                        
                         enemy.appendChild(model);
                     }
                 }, wave.start + i * wave.interval);                

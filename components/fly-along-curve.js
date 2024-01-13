@@ -40,7 +40,7 @@ AFRAME.registerComponent('fly-along-curve', {
 
         const p = this.curve.getPointAt(d);
         this.el.object3D.position.copy(p);
-
+        
         // rotate towards next point        
         const p2 = this.curve.getPointAt(d + 0.01);
         var o = new THREE.Vector3();
@@ -52,7 +52,7 @@ AFRAME.registerComponent('fly-along-curve', {
             y: THREE.MathUtils.radToDeg(Math.atan2(o.x, o.z))
         }
         this.el.setAttribute('rotation', rotation);
-    }
+    },
 });
 
 function print(a) {
