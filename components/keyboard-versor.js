@@ -15,13 +15,13 @@ AFRAME.registerComponent('keyboard-versor', {
             }
         });
         document.addEventListener("keyup", (event) => {
-            if (event.key === "w" || event.key === "ArrowUp") {
+            if ((event.key === "w" || event.key === "ArrowUp") && keyboardDirection.y === -1) {
                 keyboardDirection.y = 0;
-            } else if (event.key === "s" || event.key === "ArrowDown") {
+            } else if (event.key === "s" || event.key === "ArrowDown" && keyboardDirection.y === 1) {
                 keyboardDirection.y = 0;
-            } else if (event.key === "a" || event.key === "ArrowLeft") {
+            } else if ((event.key === "a" || event.key === "ArrowLeft") && keyboardDirection.x === -1) {
                 keyboardDirection.x = 0;
-            } else if (event.key === "d" || event.key === "ArrowRight") {
+            } else if ((event.key === "d" || event.key === "ArrowRight") && keyboardDirection.x === 1) {
                 keyboardDirection.x = 0;
             }
         });
@@ -30,6 +30,6 @@ AFRAME.registerComponent('keyboard-versor', {
         this.direction.x = this.keyboardDirection.x;
         this.direction.y = this.keyboardDirection.y;
         this.direction.z = this.keyboardDirection.z;
-        this.direction.normalize();
+        this.direction.normalize();        
     }
 });

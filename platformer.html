@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/MozillaReality/ammo.js@8bbc0ea/builds/ammo.wasm.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+
+    <script src="components/keyboard-versor.js"></script>
+    <script src="components/platformer-controls.js"></script>
+    <script>
+        AFRAME.registerComponent('ortho', {
+            init: function () {
+                var sceneEl = this.el.sceneEl;
+                    this.originalCamera = sceneEl.camera;
+                    this.cameraParent = sceneEl.camera.parent;
+                    this.orthoCamera = new THREE.OrthographicCamera(-10, 10, 10, -10);
+                    this.cameraParent.add(this.orthoCamera);
+                    sceneEl.camera = this.orthoCamera;
+                    console.log('ortho camera added');
+            },
+            remove: function () {
+                this.cameraParent.remove(this.orthoCamera);
+                sceneEl.camera = this.originalCamera;
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <a-scene physics=" driver: ammo; debug: true; debugDrawMode: 1;" stats effect="BloomPass">
+        <a-box id="player" keyboard-versor platformer-controls position="0 1 -5"
+            ammo-body="type: dynamic; angularFactor: 0 0 0; allowSleep: false; gravity: 0 -80 0; mass: 1"
+            ammo-shape="type: capsule; fit: manual; halfExtents: .5 1 .5">
+            <!-- <a-entity id="camera" position="0 1 0" camera ortho></a-entity> -->
+        </a-box>
+        <a-grid position="0 0 0" rotation="-90 0 0" width="100" height="100" ammo-body="type: static"
+            ammo-shape="type: box"></a-grid>
+        <a-entity camera="userHeight: 1.8" position="0 1 0"></a-entity>
+        
+
+        <a-box position="0 0 -10" scale="5 5 5"></a-box>
+        <a-box position="-20 3 -10" scale="5 5 5"></a-box>
+        <a-box position="20 5 -10" scale="5 5 5"></a-box>
+    </a-scene>
+</body>
+
+</html>
