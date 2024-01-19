@@ -9,43 +9,22 @@
         <script src="components/projectile.js"></script>
         <script src="components/destroyable.js"></script>
         <script src="components/explosion.js"></script>
+        <script src="components/keyboard-versor.js"></script>
 
         <script>
-            AFRAME.registerComponent('my-controls', {
+            AFRAME.registerComponent('my-controls', {       
                 init: function () {
-                    this.keyboardDirection = new THREE.Vector3(0, 0, 0);
-                    keyboardDirection = this.keyboardDirection;
-                    document.addEventListener("keydown", (event) => {
-                        if (event.key === "w") {   
-                            keyboardDirection.z = -1;                            
-                        } else if (event.key === "s") {
-                            keyboardDirection.z = 1;
-                        } else if (event.key === "a") {
-                            keyboardDirection.x = -1;
-                        } else if (event.key === "d") {
-                            keyboardDirection.x = 1;
-                        }
-                    });
-                    document.addEventListener("keyup", (event) => {
-                        if (event.key === "w") {   
-                            keyboardDirection.z = 0;                            
-                        } else if (event.key === "s") {
-                            keyboardDirection.z = 0;
-                        } else if (event.key === "a") {
-                            keyboardDirection.x = 0;
-                        } else if (event.key === "d") {
-                            keyboardDirection.x = 0;
-                        }                        
-                    });
+                    this.direction = new THREE.Vector3();
                 },
                 tick: function (time, timeDelta) {
                     // get camera element
                     var cameraEl = this.el.querySelector('#camera');
 
-                    // normalize the keyboard direction
-                    
                     // rotate keyboard direction to camera direction
-                    let direction = this.keyboardDirection.clone();                    
+                    var direction = this.direction;
+                    direction.x = this.el.components['keyboard-versor'].direction.x;
+                    direction.z = this.el.components['keyboard-versor'].direction.y;
+
                     var rotation = new THREE.Matrix4();
 
                     rotation.extractRotation(cameraEl.object3D.matrixWorld);
@@ -54,8 +33,10 @@
                     direction.normalize(); // this ensures consistent speed in all directions
                     direction.multiplyScalar(8);
                     
-                    if (this.el.body)
+                    if (this.el.body) {
                         this.el.body.setLinearVelocity(new Ammo.btVector3(direction.x, direction.y, direction.z));
+                        this.el.body.activate();
+                    }
                 }
             });
         </script>
@@ -64,7 +45,7 @@
         <a-scene physics=" driver: ammo; debug: true; debugDrawMode: 1;" stats>
             <!-- <a-box position="0 0 0" width="2" height="2" depth="2" ammo-body="type: dynamic" ammo-shape="type: box" my-controls></a-box> -->
 
-            <a-entity position="0 2 0" my-controls
+            <a-entity id="player" position="0 2 0" my-controls keyboard-versor
                     ammo-body="type: dynamic; angularFactor: 0 0 0" 
                     ammo-shape="type: capsule; fit: manual; halfExtents: .5 1 .5">
                 <a-entity id="camera" camera look-controls="pointerLockEnabled: true"></a-entity>
