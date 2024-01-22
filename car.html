@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/MozillaReality/ammo.js@8bbc0ea/builds/ammo.wasm.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+    <script src="components/ortho.js"></script>
+    <!-- <script src="components/keyboard-versor.js"></script> -->
+    <script>
+        AFRAME.registerComponent('car', {
+            turning: -1,
+            steering: 0,
+            skip: 10,
+            schema: {
+                key: { type: 'string', default: 'k' },
+            },
+            init: function () {
+                this.el.addEventListener("model-loaded", () => {
+                    this.el.setAttribute("ammo-body", {
+                        type: 'dynamic', 
+                        activationState: 'disableDeactivation',
+                        // angularFactor: '0 1 0',
+                        angularDamping: '0.5',
+                        linearDamping: '0.9',
+                        mass: .1,
+                    });
+                    // this.el.setAttribute("ammo-shape", {fit: "manual", type: 'box', halfExtents: ".5 0.5 .2"});
+                    this.el.setAttribute("ammo-shape", { fit: "all", type: 'hull', offset: "0 .3 0" });
+
+                    // turn left and right
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === this.data.key) {
+                            this.turning = 1;
+                        }
+                    });
+                    document.addEventListener('keyup', (e) => {
+                        if (e.key === this.data.key) {
+                            this.turning = -1;
+                        }
+                    });
+                });
+            },
+            tick: function (time, timeDelta) {
+                if (!this.el.body) return;
+
+                this.steering += this.turning * 0.5;
+                this.steering = Math.min(Math.max(this.steering, -0.8), 0.8);
+                this.turn(this.steering);
+
+                if (this.skip > 0) {
+                    this.skip--;
+                    return;
+                }
+                this.skip = 10;
+                
+                // maintain velocity
+                if (this.el.body.getLinearVelocity().length() < 10) {
+                    // move forward in the forward direction of the car
+                    var direction = new THREE.Vector3(-1, 0, 0);
+                    direction.applyQuaternion(this.el.object3D.quaternion);
+                    direction.normalize();
+                    // this.el.body.applyCentralForce(new Ammo.btVector3(direction.x, direction.y, direction.z));                    
+                    // direction.multiplyScalar(.1);
+                    // this.el.body.applyCentralImpulse(new Ammo.btVector3(direction.x, direction.y, direction.z));
+                    direction.multiplyScalar(10);
+                    this.el.body.setLinearVelocity(new Ammo.btVector3(direction.x, 0, direction.z));
+                }
+            },
+            turn: function (direction) {
+                var rotation = new THREE.Quaternion();
+                rotation.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), direction * Math.PI / 4);
+                this.el.object3D.quaternion.multiply(rotation);
+                // this.el.body.applyTorqueImpulse(new Ammo.btVector3(0, direction * 0.1, 0));
+                this.el.body.setAngularVelocity(new Ammo.btVector3(0, direction * 5, 0));
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+    <a-scene physics="driver: ammo; debug: true; debugDrawMode: 1;">
+        <a-assets>
+            <a-asset-item id="car-obj" src="assets/car.obj"></a-asset-item>
+            <a-asset-item id="car-mtl" src="assets/car.mtl"></a-asset-item>
+        </a-assets>
+        
+        <a-entity id="camera" position="0 10 0" rotation="-45 20 0" camera ortho></a-entity>
+
+        <a-entity geometry="primitive: box; width: 1; height: 1; depth: 10" material="color: red"
+            ammo-body="type:static" ammo-shape="type:box" position="3 1 -5">
+        </a-entity>
+
+        <a-entity id="car" obj-model="obj: #car-obj; mtl: #car-mtl" car position="0 1 -5"></a-entity>
+        
+        <a-entity obj-model="obj: #car-obj; mtl: #car-mtl" car="key: l" position="-2 1 -5"></a-entity>
+        <a-entity obj-model="obj: #car-obj; mtl: #car-mtl" car="key: j" position="-2 1 -7"></a-entity>
+
+        <a-box id="plane" color="grey" position="0 0 0" height="1" width="100" depth="100" ammo-body="type:static"
+            ammo-shape="type:box"></a-plane>
+
+    </a-scene>
+</body>
+
+</html>

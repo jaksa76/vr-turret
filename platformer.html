@@ -11,23 +11,7 @@
 
     <script src="components/keyboard-versor.js"></script>
     <script src="components/platformer-controls.js"></script>
-    <script>
-        AFRAME.registerComponent('ortho', {
-            init: function () {
-                var sceneEl = this.el.sceneEl;
-                    this.originalCamera = sceneEl.camera;
-                    this.cameraParent = sceneEl.camera.parent;
-                    this.orthoCamera = new THREE.OrthographicCamera(-10, 10, 10, -10);
-                    this.cameraParent.add(this.orthoCamera);
-                    sceneEl.camera = this.orthoCamera;
-                    console.log('ortho camera added');
-            },
-            remove: function () {
-                this.cameraParent.remove(this.orthoCamera);
-                sceneEl.camera = this.originalCamera;
-            }
-        });
-    </script>
+    <script src="components/ortho.js"></script>
 </head>
 
 <body>
