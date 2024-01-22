@@ -9,7 +9,7 @@
     <script
         src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
     <script src="components/ortho.js"></script>
-    <!-- <script src="components/keyboard-versor.js"></script> -->
+    <script src="components/bounce.js"></script>
     <script>
         AFRAME.registerComponent('car', {
             turning: -1,
@@ -17,6 +17,14 @@
             skip: 10,
             schema: {
                 key: { type: 'string', default: 'k' },
+                maxSpeed: { type: 'number', default: 10 },
+                linearDamping: { type: 'number', default: 0.8 },
+                restitution: { type: 'number', default: 10 },
+                impulse: { type: 'number', default: 0.5 },
+                speed: { type: 'number', default: 10 },
+                force: { type: 'number', default: 10 },
+                turningSpeed: { type: 'number', default: 0.5 },
+                maxSteering: { type: 'number', default: 0.8 },
             },
             init: function () {
                 this.el.addEventListener("model-loaded", () => {
@@ -25,8 +33,9 @@
                         activationState: 'disableDeactivation',
                         // angularFactor: '0 1 0',
                         angularDamping: '0.5',
-                        linearDamping: '0.9',
+                        linearDamping: this.data.linearDamping,
                         mass: .1,
+                        restitution: this.data.restitution,
                     });
                     // this.el.setAttribute("ammo-shape", {fit: "manual", type: 'box', halfExtents: ".5 0.5 .2"});
                     this.el.setAttribute("ammo-shape", { fit: "all", type: 'hull', offset: "0 .3 0" });
@@ -46,11 +55,15 @@
             },
             tick: function (time, timeDelta) {
                 if (!this.el.body) return;
-
-                this.steering += this.turning * 0.5;
-                this.steering = Math.min(Math.max(this.steering, -0.8), 0.8);
+                
+                // update steering
+                var turnSpeed = this.data.turningSpeed;
+                var maxSteering = this.data.maxSteering;
+                this.steering += this.turning * turnSpeed * timeDelta;
+                this.steering = Math.min(Math.max(this.steering, -maxSteering), maxSteering);
                 this.turn(this.steering);
 
+                // skip some frames to allow physics to catch up
                 if (this.skip > 0) {
                     this.skip--;
                     return;
@@ -58,15 +71,19 @@
                 this.skip = 10;
                 
                 // maintain velocity
-                if (this.el.body.getLinearVelocity().length() < 10) {
+                if (this.el.body.getLinearVelocity().length() < this.data.maxSpeed) {
                     // move forward in the forward direction of the car
                     var direction = new THREE.Vector3(-1, 0, 0);
                     direction.applyQuaternion(this.el.object3D.quaternion);
                     direction.normalize();
-                    // this.el.body.applyCentralForce(new Ammo.btVector3(direction.x, direction.y, direction.z));                    
-                    // direction.multiplyScalar(.1);
-                    // this.el.body.applyCentralImpulse(new Ammo.btVector3(direction.x, direction.y, direction.z));
-                    direction.multiplyScalar(10);
+                    
+                    // direction.multiplyScalar(this.data.force);
+                    // this.el.body.applyCentralForce(new Ammo.btVector3(direction.x, 0, direction.z));                    
+                    
+                    // direction.multiplyScalar(this.data.impulse);
+                    // this.el.body.applyCentralImpulse(new Ammo.btVector3(direction.x, 0, direction.z));
+
+                    direction.multiplyScalar(this.data.speed);
                     this.el.body.setLinearVelocity(new Ammo.btVector3(direction.x, 0, direction.z));
                 }
             },
@@ -95,7 +112,7 @@
             ammo-body="type:static" ammo-shape="type:box" position="3 1 -5">
         </a-entity>
 
-        <a-entity id="car" obj-model="obj: #car-obj; mtl: #car-mtl" car position="0 1 -5"></a-entity>
+        <a-entity id="car" obj-model="obj: #car-obj; mtl: #car-mtl" car bounce position="0 1 -5"></a-entity>
         
         <a-entity obj-model="obj: #car-obj; mtl: #car-mtl" car="key: l" position="-2 1 -5"></a-entity>
         <a-entity obj-model="obj: #car-obj; mtl: #car-mtl" car="key: j" position="-2 1 -7"></a-entity>
