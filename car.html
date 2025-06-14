@@ -22,7 +22,7 @@
                 restitution: { type: 'number', default: 10 },
                 impulse: { type: 'number', default: 0.5 },
                 speed: { type: 'number', default: 10 },
-                force: { type: 'number', default: 10 },
+                force: { type: 'number', default: 30 },
                 turningSpeed: { type: 'number', default: 0.5 },
                 maxSteering: { type: 'number', default: 0.8 },
             },
@@ -77,14 +77,14 @@
                     direction.applyQuaternion(this.el.object3D.quaternion);
                     direction.normalize();
                     
-                    // direction.multiplyScalar(this.data.force);
-                    // this.el.body.applyCentralForce(new Ammo.btVector3(direction.x, 0, direction.z));                    
+                    direction.multiplyScalar(this.data.force);
+                    this.el.body.applyCentralForce(new Ammo.btVector3(direction.x, 0, direction.z));                    
                     
                     // direction.multiplyScalar(this.data.impulse);
                     // this.el.body.applyCentralImpulse(new Ammo.btVector3(direction.x, 0, direction.z));
 
-                    direction.multiplyScalar(this.data.speed);
-                    this.el.body.setLinearVelocity(new Ammo.btVector3(direction.x, 0, direction.z));
+                    // direction.multiplyScalar(this.data.speed);
+                    // this.el.body.setLinearVelocity(new Ammo.btVector3(direction.x, 0, direction.z));
                 }
             },
             turn: function (direction) {
@@ -100,7 +100,7 @@
 </head>
 
 <body>
-    <a-scene physics="driver: ammo; debug: true; debugDrawMode: 1;">
+    <a-scene physics="driver: ammo; debug: false; debugDrawMode: 1;">
         <a-assets>
             <a-asset-item id="car-obj" src="assets/car.obj"></a-asset-item>
             <a-asset-item id="car-mtl" src="assets/car.mtl"></a-asset-item>
@@ -108,17 +108,17 @@
         
         <a-entity id="camera" position="0 10 0" rotation="-45 20 0" camera ortho></a-entity>
 
-        <a-entity geometry="primitive: box; width: 1; height: 1; depth: 10" material="color: red"
-            ammo-body="type:static" ammo-shape="type:box" position="3 1 -5">
-        </a-entity>
+        <a-entity geometry="primitive: box; width: 1; height: 1; depth: 20" position="6.5 1 -10" ammo-body="type:static" ammo-shape="type:box" ></a-entity>
+        <a-entity geometry="primitive: box; width: 20; height: 1; depth: 1" position="-4 1 -20.5" ammo-body="type:static" ammo-shape="type:box" ></a-entity>
+        <a-entity geometry="primitive: box; width: 1; height: 1; depth: 20" position="-14.5 1 -10" ammo-body="type:static" ammo-shape="type:box" ></a-entity>
+        <a-entity geometry="primitive: box; width: 20; height: 1; depth: 1" position="-4 1 0.5" ammo-body="type:static" ammo-shape="type:box" ></a-entity>
 
-        <a-entity id="car" obj-model="obj: #car-obj; mtl: #car-mtl" car bounce position="0 1 -5"></a-entity>
-        
-        <a-entity obj-model="obj: #car-obj; mtl: #car-mtl" car="key: l" position="-2 1 -5"></a-entity>
-        <a-entity obj-model="obj: #car-obj; mtl: #car-mtl" car="key: j" position="-2 1 -7"></a-entity>
+        <a-entity id="car1" obj-model="obj: #car-obj; mtl: #car-mtl" car="key: a; maxSteering:.8" position="0 1 -5"></a-entity>
+        <a-entity id="car2" obj-model="obj: #car-obj; mtl: #car-mtl" car="key: d; maxSteering:1.0" position="-2 1 -5"></a-entity>
+        <a-entity id="car3" obj-model="obj: #car-obj; mtl: #car-mtl" car="key: h; maxSteering:1.2" position="-2 1 -7"></a-entity>
+        <a-entity id="car4" obj-model="obj: #car-obj; mtl: #car-mtl" car="key: l; maxSteering:1.5" position="-4 1 -7"></a-entity>
 
-        <a-box id="plane" color="grey" position="0 0 0" height="1" width="100" depth="100" ammo-body="type:static"
-            ammo-shape="type:box"></a-plane>
+        <a-box id="plane" color="grey" position="0 0 0" height="1" width="100" depth="100" ammo-body="type:static" ammo-shape="type:box"></a-plane>
 
     </a-scene>
 </body>
