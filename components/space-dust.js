@@ -34,7 +34,7 @@ AFRAME.registerComponent('space-dust', {
         this.particles.forEach(p => {
             const pos = p.object3D.position;
             pos.z += timeDelta * this.data.speed;
-            if (pos.z > this.data.size/2) pos.z = -this.data.size/2;
+            if (pos.z > this.data.size/2) pos.z = -this.data.size;
         });
     }
 });

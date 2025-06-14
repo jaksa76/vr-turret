@@ -1,3 +1,10 @@
+/**
+ * @file Fly along a curve component for A-Frame
+ * 
+ * This component allows an entity to follow a predefined curve in 3D space.
+ * The curve is defined by a series of points, and the entity will move along the curve at a specified speed.
+ */
+
 AFRAME.registerComponent('fly-along-curve', {
     schema: {
         speed: {type: 'number', default: 0.0001},

@@ -19,6 +19,7 @@
     <script src="components/space-dust.js"></script>
     <script src="components/explosion.js"></script>
     <script src="components/destroyable.js"></script>
+    <script src="components/shooting-enemy.js"></script>
 
     <style>
         .a-grab-cursor {
@@ -39,11 +40,12 @@
             <a-asset-item id="turret-bottom" src="assets/canon-vr-turret-bottom.glb"></a-asset-item>
             <a-asset-item id="pancake-ship" src="assets/Pancake.glb"></a-asset-item>
             <a-asset-item id="particle" src="images/particle.gif"></a-asset-item>
+            <!-- <a-mixin id="enemy-projectile" geometry="primitive: sphere; radius: 0.2" material="color: yellow"></a-mixin> -->
             <audio id="explosionSound" src="assets/explosion.wav" preload="auto"></audio>
             <audio id="laserShoot" src="assets/laserShoot.wav" preload="auto"></audio>
         </a-assets>
 
-        <a-camera>
+        <a-camera id="camera">
             <a-entity id="cursor"
                 cursor="rayOrigin: mouse" 
                 raycaster="objects: .colliding"
@@ -84,6 +86,7 @@
         <a-entity position="0 0 0" space-dust></a-entity>
         
         <a-entity enemy-spawner></a-entity>
+        <!-- <a-entity shooting-enemy="curve: 0 0 -20, 0 5 -10, 0 0 0; stopProgress: 0.7; fireRate: 2; projectileMixin: myProjectileStyle; target: #player-head"></a-entity> -->
     </a-scene>
 </body>
 
