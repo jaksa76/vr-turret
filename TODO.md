@@ -20,6 +20,7 @@
     * missiles
     * bombs
 * multiplayer
+* levels
 * main menu
 * game over screen
 * point system
