@@ -1,11 +1,26 @@
-// AFRAME component that detects the abuttondown event and find all turrets in the scene and changes the target to the current element.
 AFRAME.registerComponent('control-switcher', {
-    init: function() {
+    schema: {
+        leftTurret:      { type: 'selector' },
+        rightTurret:     { type: 'selector' },
+        leftController:  { type: 'selector' },
+        rightController: { type: 'selector' }
+    },
+    init: function () {
+        this.mode = 'mouse'; // 'mouse' | 'dual'
+
         this.el.addEventListener('abuttondown', () => {
-            const turrets = document.querySelectorAll('[turret]');
-            for (let turret of turrets) {
-                turret.setAttribute('turret', 'target', '#' + this.el.id);
-            }
+            this.mode = (this.mode === 'mouse') ? 'dual' : 'mouse';
+            this._applyMode();
         });
+    },
+    _applyMode: function () {
+        const { leftTurret, rightTurret, leftController, rightController } = this.data;
+        if (this.mode === 'dual') {
+            leftTurret  && leftTurret.setAttribute('turret',  'target', '#' + leftController.id);
+            rightTurret && rightTurret.setAttribute('turret', 'target', '#' + rightController.id);
+        } else {
+            leftTurret  && leftTurret.setAttribute('turret',  'target', '#cursor');
+            rightTurret && rightTurret.setAttribute('turret', 'target', '#cursor');
+        }
     }
 })
