@@ -5,9 +5,6 @@ AFRAME.registerComponent('turret', {
     },
     init: function() {
         this.target = document.querySelector(this.data.target);
-        this.el.addEventListener('abuttondown', () => {
-            this.el.setAttribute('turret', 'target', '#right-hand');
-        });
     },
     update: function() {
         this.target = document.querySelector(this.data.target);
