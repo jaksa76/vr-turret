@@ -1,0 +1,10 @@
+{
+  "name": "vr-turret",
+  "private": true,
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0"
+  }
+}

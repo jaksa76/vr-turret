@@ -5,7 +5,7 @@ AFRAME.registerComponent('shooter', {
         this.lastShot = 0;
     },
     tick(time, timeDelta) {
-        if (time - this.lastShot > 200) {
+        if (time - this.lastShot > 500) {
             this.lastShot = time;
 
             const p = new THREE.Vector3();
