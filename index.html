@@ -44,6 +44,7 @@
             <!-- <a-mixin id="enemy-projectile" geometry="primitive: sphere; radius: 0.2" material="color: yellow"></a-mixin> -->
             <audio id="explosionSound" src="assets/explosion.wav" preload="auto"></audio>
             <audio id="laserShoot" src="assets/laserShoot.wav" preload="auto"></audio>
+            <audio id="servoSound" src="assets/servo.wav" preload="auto"></audio>
         </a-assets>
 
         <a-camera id="camera">
@@ -61,7 +62,7 @@
         <a-gltf-model src="#battleship" position="0 -5.38932 0" rotation="0 180 0" scale="3 3 3"></a-gltf-model>
 
         <a-entity id="left-turret" position="-1.5 0 0">        
-            <a-entity id="left-cannon" turret="target: #cursor" position="0 1 0">
+            <a-entity id="left-cannon" turret="target: #cursor; servoSound: #servoSound; minPlaybackRate: 0.5; maxPlaybackRate: 2.0; maxAngularSpeed: 180" position="0 1 0">
                 <a-gltf-model src="#turret-top" position="0 0.3 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
                 <a-entity shooter="" sound="src: #laserShoot; poolSize: 2; volume: 0.2" position="0 0.33 -1.21"></a-entity>
                 <!-- <a-entity id="left-raycaster" raycaster="showLine: true; objects: .colliding" position="0 0.33 -1.21"></a-entity> -->
@@ -71,7 +72,7 @@
         </a-entity>
 
         <a-entity id="right-turret" position="1.5 0 0">        
-            <a-entity id="right-cannon" turret="target: #cursor" position="0 1 0">
+            <a-entity id="right-cannon" turret="target: #cursor; servoSound: #servoSound; minPlaybackRate: 0.5; maxPlaybackRate: 2.0; maxAngularSpeed: 180" position="0 1 0">
                 <a-gltf-model src="#turret-top" position="0 0.3 0" rotation="0 180 0" scale="0.5 0.5 0.5"></a-gltf-model>
                 <a-entity shooter="" sound="src: #laserShoot; volume: 0.2" position="0 0.33 -1.21"></a-entity>
                 <!-- <a-entity id="right-raycaster" raycaster="showLine: true; objects: .colliding" position="0 0.33 -1.21"></a-entity> -->
