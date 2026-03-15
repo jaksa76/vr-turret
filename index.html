@@ -14,6 +14,7 @@
     <script src="components/shooter.js"></script>
     <script src="components/asteroid-field.js"></script>
     <script src="components/fly-along-curve.js"></script>    
+    <script src="components/wave-generator.js"></script>
     <script src="components/enemy-spawner.js"></script>
     <script src="components/control-switcher.js"></script>
     <script src="components/space-dust.js"></script>
@@ -87,7 +88,9 @@
         <!-- <a-entity asteroid-field position="0 2 -15"></a-entity> -->
         <a-entity position="0 0 0" space-dust></a-entity>
         
-        <a-entity enemy-spawner></a-entity>
+        <a-entity
+            wave-generator="seed: 42; numWaves: 10; difficulty: 0.4; waveGap: 6000"
+            enemy-spawner></a-entity>
         <!-- <a-entity shooting-enemy="curve: 0 0 -20, 0 5 -10, 0 0 0; stopProgress: 0.7; fireRate: 2; projectileMixin: myProjectileStyle; target: #player-head"></a-entity> -->
     </a-scene>
 </body>
