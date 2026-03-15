@@ -47,7 +47,12 @@ const waves = [
 
 AFRAME.registerComponent('enemy-spawner', {
     init: function() {
-        for (let wave of waves) {
+        // Use algorithmically generated waves if a wave-generator component is present
+        // on this entity; otherwise fall back to the hardcoded waves constant above.
+        const generatorComponent = this.el.components['wave-generator'];
+        const waveDefs = generatorComponent ? generatorComponent.waves : waves;
+
+        for (let wave of waveDefs) {
             for (let i = 0; i < wave.number; i++) {
                 setTimeout(() => {
                     if (wave.type == 'fly-along-curve') {
